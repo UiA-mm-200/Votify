@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultater</title>
+</head>
+
+<body>
+
+    <script>
+        let A = 0;
+        let B = 0;
+
+        (function () {
+            let inter = setInterval(getResults, 1000);
+        })();
+
+        function getResults() {
+            fetch("/votes").then(resp => { return resp.json() }).then(json => {
+                A = json.A;
+                B = json.B;
+                refreshDisplay();
+            })
+        }
+
+        function refreshDisplay() {
+            document.body.innerHTML = "";
+            let res = document.createElement("h1");
+            res.innerHTML = `A ${A} vs B ${B}`;
+            document.body.appendChild(res);
+        }
+
+    </script>
+
+</body>
+
+</html>

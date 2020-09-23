@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            min-height: 100%;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            min-height: 100%;
+        }
+
+        .container>div {
+            flex-grow: 1;
+            min-height: 100%;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .blue {
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="optA" class="red">A</div>
+        <div id="optB" class="blue">B</div>
+    </div>
+
+    <script>
+
+        let superSecretStuff = "";
+        let isVoting = false;
+
+        (function () {
+
+            let optionA = document.getElementById("optA");
+            let optionB = document.getElementById("optB");
+
+            optionA.onclick = function (evt) {
+                voteFor("A");
+            }
+
+            optionB.onclick = function (evt) {
+                voteFor("B");
+            }
+
+        })();
+
+        function voteFor(option) {
+
+            if (isVoting) { return }
+
+            isVoting = true;
+
+            let config = {
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    "x-stuff": superSecretStuff
+                }
+            };
+
+            fetch(`/vote/${option}`, config).then(resp => {
+                return resp.json();
+            }).then(json => {
+                superSecretStuff = json.secret;
+                let votesA = json.A;
+                let votesB = json.B;
+                alert(`Votes A:${votesA} vs B:${votesB}`);
+                isVoting = false;
+
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>
